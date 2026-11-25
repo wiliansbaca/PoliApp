@@ -1,0 +1,38 @@
+# Publica el frontend Angular (poliapp-web) en Azure Static Web Apps -> https://www.poliapp.tech
+# Requiere el secreto AZURE_STATIC_WEB_APPS_API_TOKEN (token de implementación del Static Web App "poliapp-web").
+name: Frontend - Azure Static Web Apps
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'poliapp-web/**'
+      - '.github/workflows/azure-static-web-apps.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: poliapp-web/package-lock.json
+
+      - name: Compilar Angular (producción)
+        working-directory: poliapp-web
+        run: |
+          npm ci
+          npm run build -- --configuration production
+
+      - name: Desplegar en Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: poliapp-web/dist/poliapp-web/browser
+          skip_app_build: true
+          skip_api_build: true
