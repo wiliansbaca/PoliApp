@@ -2,5 +2,5 @@
 // y llama a la API que sigue en Azure App Service.
 export const environment = {
   production: true,
-  apiUrl: 'https://NOMBRE-APP.azurewebsites.net',
+  apiUrl: 'https://poliapp-wb1125.azurewebsites.net',
 };
