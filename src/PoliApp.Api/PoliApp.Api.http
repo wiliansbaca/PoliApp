@@ -1,0 +1,15 @@
+@api = https://localhost:7180
+
+### Iniciar sesión como administrador (copia el token de la respuesta)
+POST {{api}}/api/auth/login
+Content-Type: application/json
+
+{ "correo": "admin@poliapp.pe", "password": "Admin123*" }
+
+### Disponibilidad del día
+GET {{api}}/api/canchas/disponibilidad?fecha=2026-12-01
+
+### Panel del administrador
+@token = pega-aqui-el-token
+GET {{api}}/api/admin/panel
+Authorization: Bearer {{token}}

@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PoliApp.Api/PoliApp.Api.csproj" />
+    <Project Path="src/PoliApp.Domain/PoliApp.Domain.csproj" />
+    <Project Path="src/PoliApp.Infrastructure/PoliApp.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PoliApp.Tests/PoliApp.Tests.csproj" />
+  </Folder>
+  <Folder Name="/database/">
+    <File Path="database/01_CrearBaseDatos.sql" />
+  </Folder>
+</Solution>

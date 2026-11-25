@@ -1,0 +1,7 @@
+bin/
+obj/
+.vs/
+*.user
+poliapp-web/node_modules/
+poliapp-web/dist/
+poliapp-web/.angular/
