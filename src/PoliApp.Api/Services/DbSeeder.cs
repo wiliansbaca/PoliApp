@@ -8,6 +8,18 @@ namespace PoliApp.Api.Services;
 /// <summary>Carga usuarios y reservas de prueba la primera vez que se ejecuta la API en desarrollo.</summary>
 public static class DbSeeder
 {
+    /// <summary>Crea la base si no existe y agrega las columnas nuevas a una base ya creada (sin migraciones).</summary>
+    public static async Task ActualizarEsquemaAsync(IServiceProvider sp)
+    {
+        using var scope = sp.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PoliAppDbContext>();
+        await db.Database.EnsureCreatedAsync();
+        await db.Database.ExecuteSqlRawAsync("""
+            IF COL_LENGTH('dbo.Canchas', 'ICalOcupadosUrl') IS NULL ALTER TABLE dbo.Canchas ADD ICalOcupadosUrl NVARCHAR(500) NULL;
+            IF COL_LENGTH('dbo.Canchas', 'CalendarioToken') IS NULL ALTER TABLE dbo.Canchas ADD CalendarioToken NVARCHAR(32) NULL;
+            """);
+    }
+
     public static async Task SembrarAsync(IServiceProvider sp)
     {
         using var scope = sp.CreateScope();

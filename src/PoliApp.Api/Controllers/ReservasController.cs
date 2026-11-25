@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PoliApp.Api.Auth;
+using PoliApp.Api.Services;
 using PoliApp.Domain;
 using PoliApp.Domain.Entities;
 using PoliApp.Infrastructure.Persistence;
@@ -12,7 +13,7 @@ namespace PoliApp.Api.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/reservas")]
-public class ReservasController(PoliAppDbContext db) : ControllerBase
+public class ReservasController(PoliAppDbContext db, CalendarioExternoService calendarios) : ControllerBase
 {
     [HttpGet("mias")]
     public async Task<IEnumerable<ReservaDto>> MisReservas()
@@ -111,6 +112,10 @@ public class ReservasController(PoliAppDbContext db) : ControllerBase
             .ToListAsync();
         if (mismoDia.Any(r => r.SeCruzaCon(fecha, inicio, fin)))
             throw new DomainException("Ese horario ya está ocupado. Elige otro horario disponible.");
+
+        var bloqueos = await calendarios.OcupadosAsync(cancha.ICalOcupadosUrl, fecha);
+        if (bloqueos.Any(b => b.SeCruzaCon(fecha.ToDateTime(inicio), fecha.ToDateTime(fin))))
+            throw new DomainException("El complejo bloqueó ese horario en su calendario. Elige otro horario disponible.");
 
         return (fecha, inicio, fin);
     }

@@ -48,6 +48,11 @@ public record DisponibilidadDto(CanchaDto Cancha, IReadOnlyList<BloqueDto> Bloqu
 
 public record HorarioOcupadoDto(string HoraInicio, string HoraFin);
 
+// ---------- Google Calendar (HU07, HU08) ----------
+public record CalendarioCanchaDto(int CanchaId, string Cancha, string? IcalOcupadosUrl, string UrlSuscripcion);
+
+public record VincularCalendarioDto([MaxLength(500)] string? IcalOcupadosUrl);
+
 // ---------- Reservas (HU05, HU06, HU07) ----------
 public record ReservaDto(
     int Id, string Codigo, int CanchaId, string CanchaNombre, string ComplejoNombre, string ClienteNombre, string ClienteTelefono,

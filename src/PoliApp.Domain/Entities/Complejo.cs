@@ -8,7 +8,7 @@ public class Complejo
     public string Direccion { get; set; } = string.Empty;
     public string Distrito { get; set; } = string.Empty;
     public string? Telefono { get; set; }
-    /// <summary>Calendario de Google donde se sincronizan las reservas (integración prevista).</summary>
+    /// <summary>Campo heredado; la integración con Google Calendar se configura por cancha (Cancha.ICalOcupadosUrl).</summary>
     public string? GoogleCalendarId { get; set; }
     public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
 

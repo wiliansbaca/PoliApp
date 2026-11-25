@@ -38,6 +38,8 @@ CREATE TABLE dbo.Canchas (
     HoraApertura TIME(7)        NOT NULL CONSTRAINT DF_Canchas_Apertura DEFAULT '07:00',
     HoraCierre   TIME(7)        NOT NULL CONSTRAINT DF_Canchas_Cierre DEFAULT '23:00',
     Activa       BIT            NOT NULL CONSTRAINT DF_Canchas_Activa DEFAULT 1,
+    ICalOcupadosUrl NVARCHAR(500) NULL,   -- dirección secreta iCal de Google Calendar (horarios bloqueados)
+    CalendarioToken NVARCHAR(32)  NULL,   -- código del enlace .ics de reservas para suscribirse
     CONSTRAINT CK_Canchas_Horario CHECK (HoraCierre > HoraApertura)
 );
 

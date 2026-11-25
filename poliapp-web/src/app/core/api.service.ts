@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Cancha, Complejo, Disponibilidad, Pago, Panel, Reporte, Reserva } from './models';
+import { CalendarioCancha, Cancha, Complejo, Disponibilidad, Pago, Panel, Reporte, Reserva } from './models';
 
 type Params = Record<string, string | number>;
 
@@ -50,5 +50,11 @@ export class ApiService {
   pagos(estado?: string) { return this.http.get<Pago[]>('/api/admin/pagos', { params: limpiar({ estado }) }); }
   validarPago(id: number) { return this.http.patch<void>(`/api/admin/pagos/${id}/validar`, {}); }
   observarPago(id: number) { return this.http.patch<void>(`/api/admin/pagos/${id}/observar`, {}); }
+  // Google Calendar (HU07, HU08)
+  calendario(id: number) { return this.http.get<CalendarioCancha>(`/api/admin/canchas/${id}/calendario`); }
+  vincularCalendario(id: number, icalOcupadosUrl: string | null) {
+    return this.http.put<CalendarioCancha>(`/api/admin/canchas/${id}/calendario`, { icalOcupadosUrl });
+  }
+  renovarEnlaceCalendario(id: number) { return this.http.post<CalendarioCancha>(`/api/admin/canchas/${id}/calendario/renovar-enlace`, {}); }
   reporte(desde: string, hasta: string) { return this.http.get<Reporte>('/api/admin/reportes', { params: { desde, hasta } }); }
 }

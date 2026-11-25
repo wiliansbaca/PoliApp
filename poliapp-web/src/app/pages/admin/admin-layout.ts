@@ -24,6 +24,7 @@ export class AdminLayout {
     { ruta: '/admin/complejos', texto: 'Complejos y canchas', icono: 'bi-building' },
     { ruta: '/admin/horarios', texto: 'Horarios y tarifas', icono: 'bi-clock' },
     { ruta: '/admin/reservas', texto: 'Reservas', icono: 'bi-calendar-check' },
+    { ruta: '/admin/calendario', texto: 'Google Calendar', icono: 'bi-google' },
     { ruta: '/admin/reportes', texto: 'Reportes', icono: 'bi-bar-chart' },
     { ruta: '/admin/pagos', texto: 'Pagos', icono: 'bi-cash-coin' },
   ];

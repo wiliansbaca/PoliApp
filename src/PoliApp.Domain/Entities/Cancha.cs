@@ -11,6 +11,12 @@ public class Cancha
     public TimeOnly HoraCierre { get; set; } = new(23, 0);
     public bool Activa { get; set; } = true;
 
+    /// <summary>Dirección secreta en formato iCal del calendario de Google donde el administrador bloquea horarios.</summary>
+    public string? ICalOcupadosUrl { get; set; }
+
+    /// <summary>Código secreto del enlace .ics de reservas al que el administrador se suscribe en Google Calendar.</summary>
+    public string? CalendarioToken { get; set; }
+
     public Complejo? Complejo { get; set; }
     public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 
@@ -28,6 +34,17 @@ public class Cancha
 
     public decimal CalcularMonto(TimeOnly inicio, TimeOnly fin) =>
         Math.Round(PrecioHora * (decimal)(fin - inicio).TotalHours, 2);
+
+    public void GenerarTokenCalendario() => CalendarioToken = Guid.NewGuid().ToString("N");
+
+    public void VincularCalendario(string? icalOcupadosUrl)
+    {
+        var url = string.IsNullOrWhiteSpace(icalOcupadosUrl) ? null : icalOcupadosUrl.Trim();
+        if (url is not null && !Calendario.ICalendario.EsDireccionPermitida(url))
+            throw new DomainException("Pega la «dirección secreta en formato iCal» de Google Calendar (empieza con https://calendar.google.com y termina en .ics).");
+        ICalOcupadosUrl = url;
+        CalendarioToken ??= Guid.NewGuid().ToString("N");
+    }
 
     public void ConfigurarHorario(TimeOnly apertura, TimeOnly cierre, decimal precioHora)
     {

@@ -43,6 +43,8 @@ public class PoliAppDbContext(DbContextOptions<PoliAppDbContext> options) : DbCo
             e.Property(x => x.Nombre).HasMaxLength(80).IsRequired();
             e.Property(x => x.Tipo).HasMaxLength(40).IsRequired();
             e.Property(x => x.PrecioHora).HasPrecision(10, 2);
+            e.Property(x => x.ICalOcupadosUrl).HasMaxLength(500);
+            e.Property(x => x.CalendarioToken).HasMaxLength(32);
             e.HasOne(x => x.Complejo).WithMany(c => c.Canchas).HasForeignKey(x => x.ComplejoId);
         });
 

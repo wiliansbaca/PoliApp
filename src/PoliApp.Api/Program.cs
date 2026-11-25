@@ -19,6 +19,14 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<NotificacionService>();
+// Integración con Google Calendar mediante iCalendar (sin Google Cloud)
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient(CalendarioExternoService.ClienteHttp, c =>
+{
+    c.Timeout = TimeSpan.FromSeconds(8);
+    c.DefaultRequestHeaders.UserAgent.ParseAdd("PoliApp/1.0 (+https://www.poliapp.tech)");
+});
+builder.Services.AddScoped<CalendarioExternoService>();
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
 
 // Seguridad: autenticación con JWT y autorización por roles (HU01)
@@ -58,6 +66,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(); // Documentación interactiva en /scalar
 }
+
+// Agrega a la base existente las columnas de la integración con Google Calendar.
+await DbSeeder.ActualizarEsquemaAsync(app.Services);
 
 // Crea el esquema y los datos de demostración (en desarrollo o si se activa SembrarDatosDemo).
 if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("SembrarDatosDemo"))

@@ -44,6 +44,8 @@ export interface Reserva {
   estadoPago: 'PorValidar' | 'Validado' | 'Observado' | null;
 }
 
+export interface CalendarioCancha { canchaId: number; cancha: string; icalOcupadosUrl: string | null; urlSuscripcion: string; }
+
 export interface Complejo { id: number; nombre: string; direccion: string; distrito: string; telefono: string | null; canchas: number; }
 
 export interface Pago {
@@ -63,6 +65,21 @@ export interface Reporte {
 export function fechaLocal(d = new Date()): string {
   const p = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+/** Enlace para que el deportista guarde su reserva en su propio Google Calendar (no requiere permisos). */
+export function enlaceGoogleCalendar(r: Reserva): string {
+  const f = r.fecha.replaceAll('-', '');
+  const h = (x: string) => x.slice(0, 5).replace(':', '') + '00';
+  const p = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `Fútbol en ${r.complejoNombre} · ${r.canchaNombre}`,
+    dates: `${f}T${h(r.horaInicio)}/${f}T${h(r.horaFin)}`,
+    ctz: 'America/Lima',
+    details: `Reserva ${r.codigo} hecha en Poli-App (https://www.poliapp.tech). Estado: ${r.estado}.`,
+    location: `${r.complejoNombre}, Cusco`,
+  });
+  return `https://calendar.google.com/calendar/render?${p.toString()}`;
 }
 
 export function sumarHora(hora: string, horas: number): string {

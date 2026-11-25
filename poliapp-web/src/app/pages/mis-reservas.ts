@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../core/api.service';
-import { COLOR_ESTADO, fechaLocal, mensajeError, Reserva, sumarHora } from '../core/models';
+import { COLOR_ESTADO, enlaceGoogleCalendar, fechaLocal, mensajeError, Reserva, sumarHora } from '../core/models';
 
 /** HU06 y HU11: mis reservas, cancelar, reprogramar y pagar con Yape/Plin. */
 @Component({
@@ -64,6 +64,10 @@ import { COLOR_ESTADO, fechaLocal, mensajeError, Reserva, sumarHora } from '../c
                     } @else { — }
                   </td>
                   <td class="text-end text-nowrap">
+                    @if (r.estado === 'Pendiente' || r.estado === 'Confirmada') {
+                      <a class="btn btn-sm btn-outline-success me-1" [href]="enlaceGoogle(r)" target="_blank" rel="noopener"
+                         title="Agregar a Google Calendar"><i class="bi bi-google"></i></a>
+                    }
                     @if (r.puedeModificarse) {
                       <button class="btn btn-sm btn-warning me-1" (click)="abrirReprogramar(r)">Reprogramar</button>
                       <button class="btn btn-sm btn-danger" (click)="cancelar(r)">Cancelar</button>
@@ -108,6 +112,8 @@ export class MisReservas {
   }
 
   private aviso(texto: string, ok: boolean) { this.mensaje.set(texto); this.ok.set(ok); }
+
+  protected enlaceGoogle(r: Reserva) { return enlaceGoogleCalendar(r); }
 
   protected etiquetaPago(e: string) { return e === 'PorValidar' ? 'Por validar' : e; }
 
